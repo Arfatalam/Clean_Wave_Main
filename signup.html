@@ -1,3 +1,347 @@
+
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Create Account | CLEAN WAVE</title><link rel="stylesheet" href="style.css"><script src="clerk-config.js" defer></script><script src="clerk-auth.js" defer></script></head>
-<body class="auth-page"><header class="auth-topbar"><a href="index.html" class="logo">CLEAN <span>WAVE</span></a><a href="index.html" class="auth-home-link">Back to Website</a></header><main class="auth-container"><section class="auth-card"><div class="auth-brand-mark">CW</div><span class="auth-eyebrow">CLEAN WAVE CUSTOMER ACCOUNT</span><h1>Create your account</h1><p class="auth-intro">Register securely to shop CLEAN WAVE products.</p><div id="clerkSignUp" class="clerk-auth-root"></div><p id="clerkError" class="auth-message error" role="alert"></p></section></main><footer class="auth-footer">© 2026 CLEAN WAVE. All Rights Reserved.</footer></body></html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#082f63">
+
+    <title>Create Account | CLEAN WAVE</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="auth.js" defer></script>
+</head>
+
+<body class="auth-page">
+
+    <header class="auth-topbar">
+
+        <a href="index.html" class="auth-brand">
+            <span class="auth-brand-icon">CW</span>
+            <span>CLEAN WAVE</span>
+        </a>
+
+        <a href="index.html" class="auth-home-link">
+            Back to Website
+        </a>
+
+    </header>
+
+    <main class="auth-container">
+
+        <section class="auth-card">
+
+            <div class="auth-heading">
+
+                <div class="auth-logo">CW</div>
+
+                <span class="auth-eyebrow">
+                    CLEAN WAVE CUSTOMER ACCOUNT
+                </span>
+
+                <h1>Create your account</h1>
+
+                <p>
+                    Create an account to shop and manage your orders.
+                </p>
+
+            </div>
+
+            <div
+                id="authMessage"
+                class="auth-message"
+                role="status"
+                aria-live="polite"
+                hidden
+            ></div>
+
+            <!-- SIGNUP FORM -->
+            <form id="signupForm" class="auth-form">
+
+                <div class="form-group">
+
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        id="fullName"
+                        name="fullName"
+                        type="text"
+                        autocomplete="name"
+                        placeholder="Enter your full name"
+                        minlength="2"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="companyName">
+                        Company / Store Name
+                        <span class="optional-text">(Optional)</span>
+                    </label>
+
+                    <input
+                        id="companyName"
+                        name="companyName"
+                        type="text"
+                        autocomplete="organization"
+                        placeholder="Enter company or store name"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="signupEmail">
+                        Email Address
+                    </label>
+
+                    <input
+                        id="signupEmail"
+                        name="email"
+                        type="email"
+                        autocomplete="email"
+                        placeholder="Enter your email address"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="signupPhone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        id="signupPhone"
+                        name="phone"
+                        type="tel"
+                        autocomplete="tel"
+                        placeholder="Enter your phone number"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="signupPassword">
+                        Password
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            id="signupPassword"
+                            name="password"
+                            type="password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            placeholder="At least 8 characters"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-toggle-password="signupPassword"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            type="password"
+                            autocomplete="new-password"
+                            minlength="8"
+                            placeholder="Enter password again"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            data-toggle-password="confirmPassword"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <label class="remember-row">
+
+                    <input
+                        type="checkbox"
+                        id="signupRememberMe"
+                        name="rememberMe"
+                    >
+
+                    <span>Remember me for 20 days</span>
+
+                </label>
+
+                <button
+                    class="auth-submit"
+                    id="signupButton"
+                    type="submit"
+                >
+                    Create Account
+                </button>
+
+            </form>
+
+            <!-- DIVIDER -->
+            <div class="auth-divider">
+                <span></span>
+                <p>OR</p>
+                <span></span>
+            </div>
+
+            <!-- GOOGLE SIGNUP -->
+            <button
+                type="button"
+                id="googleSignupBtn"
+                class="social-auth-btn"
+            >
+
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                >
+                    <path
+                        fill="#EA4335"
+                        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.06 13.22l7.98 6.19C11.93 13.72 17.48 9.5 24 9.5z"
+                    />
+                    <path
+                        fill="#4285F4"
+                        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.76 7.18l7.73 6C44.42 37.97 46.98 31.86 46.98 24.55z"
+                    />
+                    <path
+                        fill="#FBBC05"
+                        d="M10.04 28.59A14.4 14.4 0 0 1 9.27 24c0-1.59.27-3.13.77-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.48-6.19z"
+                    />
+                    <path
+                        fill="#34A853"
+                        d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.14 1.45-4.89 2.3-8.18 2.3-6.52 0-12.07-4.22-14.04-10.09l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+                    />
+                </svg>
+
+                Continue with Google
+
+            </button>
+
+            <div class="auth-footer-links">
+
+                Already have an account?
+
+                <a href="login.html">
+                    Login
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="auth-page-footer">
+        © 2026 CLEAN WAVE. All Rights Reserved.
+    </footer>
+
+    <script>
+
+        // GOOGLE SIGNUP
+        document.getElementById("googleSignupBtn")
+            ?.addEventListener("click", () => {
+
+                const rememberMe =
+                    document.getElementById("signupRememberMe")?.checked
+                        ? "1"
+                        : "0";
+
+                window.location.href =
+                    `/api/oauth/google?remember=${rememberMe}`;
+
+            });
+
+
+        // SHOW / HIDE PASSWORD
+        document.querySelectorAll("[data-toggle-password]")
+            .forEach(button => {
+
+                button.addEventListener("click", () => {
+
+                    const inputId =
+                        button.getAttribute("data-toggle-password");
+
+                    const passwordInput =
+                        document.getElementById(inputId);
+
+                    if (!passwordInput) return;
+
+                    if (passwordInput.type === "password") {
+
+                        passwordInput.type = "text";
+                        button.textContent = "Hide";
+
+                    } else {
+
+                        passwordInput.type = "password";
+                        button.textContent = "Show";
+
+                    }
+
+                });
+
+            });
+
+
+        // CONFIRM PASSWORD VALIDATION
+        document.getElementById("signupForm")
+            ?.addEventListener("submit", event => {
+
+                const password =
+                    document.getElementById("signupPassword").value;
+
+                const confirmPassword =
+                    document.getElementById("confirmPassword").value;
+
+                if (password !== confirmPassword) {
+
+                    event.preventDefault();
+
+                    const message =
+                        document.getElementById("authMessage");
+
+                    message.hidden = false;
+                    message.textContent = "Passwords do not match.";
+
+                }
+
+            });
+
+    </script>
+
+</body>
+</html>

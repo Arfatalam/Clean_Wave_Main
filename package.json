@@ -1,0 +1,44 @@
+{
+  "name": "clean_wave_clerk---copy",
+  "version": "1.0.0",
+  "description": "��#\u0000 \u0000C\u0000l\u0000e\u0000a\u0000n\u0000_\u0000W\u0000a\u0000v\u0000e\u00001\u0000\r\u0000 \u0000#\u0000 \u0000C\u0000l\u0000e\u0000a\u0000n\u0000_\u0000W\u0000a\u0000v\u0000e\u00001\u0000\r\u0000 \u0000",
+  "main": "app.js",
+  "scripts": {
+    "start": "node server/server.js",
+    "dev": "nodemon server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arfatalam/Clean_Wave1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Arfatalam/Clean_Wave1/issues"
+  },
+  "homepage": "https://github.com/Arfatalam/Clean_Wave1#readme",
+  "dependencies": {
+    "@clerk/backend": "^3.27.0",
+    "@clerk/express": "^2.1.88",
+    "@supabase/supabase-js": "^2.119.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^18.0.9",
+    "exceljs": "^4.4.0",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.3",
+    "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "multer": "^2.5.0",
+    "nodemailer": "^10.4.0",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "pdfkit": "^0.20.2",
+    "razorpay": "^2.9.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

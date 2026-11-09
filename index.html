@@ -6,24 +6,39 @@
     <meta name="description" content="CLEAN WAVE cleaning chemical manufacturer in Palsana, Surat, Gujarat. Small and bulk quantities.">
     <title>CLEAN WAVE | Cleaning Chemical Manufacturer</title>
     <link rel="stylesheet" href="style.css">
-    <script src="clerk-config.js" defer></script>
-    <script src="clerk-auth.js" defer></script>
+    <script src="/auth.js" defer></script>
     <script src="app.js" defer></script>
 </head>
 <body>
 <header class="header">
     <div class="nav-container">
-        <a href="index.html" class="logo">CLEAN <span>WAVE</span></a>
+        <img src="clean wave logo.jpeg" alt="" style="height: 50px; width: 50px; border-radius: 50%;">
+        <a href="index.html" class="logo">CLEAN <span>WAVE</span></a>        
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false">
             <span></span><span></span><span></span>
         </button>
-        <nav class="navbar" id="navbar">
-            <a href="index.html">Home</a>
-            <a href="index.html#about">About</a>
-            <a href="index.html#contact">Contact</a>
-            <a href="cart.html" class="cart-btn">Cart <span id="cartCount">0</span></a>
-            <a href="tel:+919106562058" class="call-btn">Call Us</a>
-        </nav>
+        
+<nav class="navbar" id="navbar">
+    <a href="index.html">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#contact">Contact</a>
+
+    <a href="cart.html" class="cart-btn">
+        Cart <span id="cartCount">0</span>
+    </a>
+
+    <a href="tel:+919106562058" class="call-btn">Call Us</a>
+
+    <!-- Authentication controls -->
+    <a href="/login.html" id="accountLink" class="auth-nav-link">
+        Login / Sign Up
+    </a>
+
+    <button type="button" id="logoutButton" class="auth-logout-nav" hidden>
+        Logout
+    </button>
+</nav>
+
     </div>
 </header>
 <main>
@@ -58,7 +73,7 @@
     </section>
 
     <section class="about-section" id="about">
-        <div class="about-image"><img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=900&q=85" alt="Industrial facility" onerror="this.onerror=null;this.src='https://placehold.co/900x600/123b5d/ffffff?text=CLEAN+WAVE';"></div>
+        <div class="about-image"><img src="clean wave logo.jpeg" alt="Industrial facility" onerror="this.onerror=null;this.src='https://placehold.co/900x600/123b5d/ffffff?text=CLEAN+WAVE';"></div>
         <div class="about-content"><span class="section-tag">ABOUT OUR COMPANY</span><h2>About CLEAN WAVE</h2>
             <p>CLEAN WAVE is based in Palsana, Surat, Gujarat, India. We offer cleaning chemical products for industrial, household and car wash applications.</p>
             <p>We support both small and bulk quantity enquiries. Contact our team to discuss your product requirements.</p>

@@ -1,3 +1,209 @@
+
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Login | CLEAN WAVE</title><link rel="stylesheet" href="style.css"><script src="clerk-config.js" defer></script><script src="clerk-auth.js" defer></script></head>
-<body class="auth-page"><header class="auth-topbar"><a href="index.html" class="logo">CLEAN <span>WAVE</span></a><a href="index.html" class="auth-home-link">Back to Website</a></header><main class="auth-container"><section class="auth-card"><div class="auth-brand-mark">CW</div><span class="auth-eyebrow">CLEAN WAVE CUSTOMER ACCOUNT</span><h1>Welcome back</h1><p class="auth-intro">Sign in to continue with your CLEAN WAVE order.</p><div id="clerkSignIn" class="clerk-auth-root"></div><p id="clerkError" class="auth-message error" role="alert"></p></section></main><footer class="auth-footer">© 2026 CLEAN WAVE. All Rights Reserved.</footer></body></html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#082f63">
+
+    <title>Login | CLEAN WAVE</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="auth.js" defer></script>
+</head>
+
+<body class="auth-page">
+
+    <header class="auth-topbar">
+        <a href="index.html" class="auth-brand">
+            <span class="auth-brand-icon">CW</span>
+            <span>CLEAN WAVE</span>
+        </a>
+
+        <a href="index.html" class="auth-home-link">
+            Back to Home
+        </a>
+    </header>
+
+    <main class="auth-container">
+
+        <section class="auth-card">
+
+            <div class="auth-heading">
+                <div class="auth-logo">CW</div>
+
+                <h1>Welcome Back</h1>
+
+                <p>
+                    Sign in to your CLEAN WAVE account
+                </p>
+            </div>
+
+            <!-- LOGIN FORM -->
+            <form id="loginForm" class="auth-form">
+
+                <div class="form-group">
+                    <label for="identifier">
+                        Email Address or Phone Number
+                    </label>
+
+                    <input
+                        type="text"
+                        id="identifier"
+                        name="identifier"
+                        placeholder="Enter your email or phone"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="password-toggle"
+                            id="togglePassword"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+                
+
+
+                <div class="auth-options">
+
+                    <label class="remember-row">
+                        <input
+                            type="checkbox"
+                            id="rememberMe"
+                            name="rememberMe"
+                        >
+
+                        <span>Remember me for 20 days</span>
+                    </label>
+
+                    <a href="forgot-password.html" class="forgot-link">
+                        Forgot Password?
+                    </a>
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="auth-submit-btn"
+                    id="loginButton"
+                >
+                    Login
+                </button>
+
+                <div
+                    id="authMessage"
+                    class="auth-message"
+                    role="status"
+                    aria-live="polite"
+                ></div>
+
+            </form>
+
+            <!-- DIVIDER -->
+            <div class="auth-divider">
+                <span></span>
+                <p>OR</p>
+                <span></span>
+            </div>
+
+            <!-- GOOGLE LOGIN -->
+            <button
+                type="button"
+                id="googleLoginBtn"
+                class="social-auth-btn"
+            >
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 48 48"
+                    aria-hidden="true"
+                >
+                    <path
+                        fill="#EA4335"
+                        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.06 13.22l7.98 6.19C11.93 13.72 17.48 9.5 24 9.5z"
+                    />
+                    <path
+                        fill="#4285F4"
+                        d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.76 7.18l7.73 6C44.42 37.97 46.98 31.86 46.98 24.55z"
+                    />
+                    <path
+                        fill="#FBBC05"
+                        d="M10.04 28.59A14.4 14.4 0 0 1 9.27 24c0-1.59.27-3.13.77-4.59l-7.98-6.19A23.9 23.9 0 0 0 0 24c0 3.87.93 7.52 2.56 10.78l7.48-6.19z"
+                    />
+                    <path
+                        fill="#34A853"
+                        d="M24 48c6.48 0 11.93-2.13 15.91-5.8l-7.73-6c-2.14 1.45-4.89 2.3-8.18 2.3-6.52 0-12.07-4.22-14.04-10.09l-7.98 6.19C6.51 42.62 14.62 48 24 48z"
+                    />
+                </svg>
+
+                Continue with Google
+            </button>
+
+            <div class="auth-footer">
+                <p>
+                    Don't have an account?
+                    <a href="signup.html">Create Account</a>
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // GOOGLE LOGIN
+        document.getElementById("googleLoginBtn")?.addEventListener("click", () => {
+
+            const rememberMe =
+                document.getElementById("rememberMe")?.checked ? "1" : "0";
+
+            window.location.href =
+                `/api/oauth/google?remember=${rememberMe}`;
+
+        });
+
+        // SHOW / HIDE PASSWORD
+        document.getElementById("togglePassword")?.addEventListener("click", () => {
+
+            const password = document.getElementById("password");
+            const toggle = document.getElementById("togglePassword");
+
+            if (password.type === "password") {
+                password.type = "text";
+                toggle.textContent = "Hide";
+            } else {
+                password.type = "password";
+                toggle.textContent = "Show";
+            }
+
+        });
+    </script>
+
+</body>
+</html>

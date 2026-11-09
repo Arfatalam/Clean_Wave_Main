@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CLEAN WAVE Admin Dashboard">
+    <meta name="theme-color" content="#082f63">
+    <title>CLEAN WAVE | Admin Dashboard</title>
+
+    <link rel="stylesheet" href="admin.css">
+    <script src="auth.js" defer></script>
+    <script src="admin.js" defer></script>
+
+    <style>
+        .admin-section { display:none; }
+        .admin-section.active { display:block; }
+
+        .admin-section,.panel {
+            background:#fff;
+            border-radius:12px;
+            padding:22px;
+            margin:20px 0;
+            box-shadow:0 3px 15px rgba(0,0,0,.06);
+        }
+
+        .stats {
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+            gap:15px;
+            margin:20px 0;
+        }
+
+        .stats article {
+            padding:20px;
+            border-radius:12px;
+            background:#fff;
+            box-shadow:0 3px 15px rgba(0,0,0,.06);
+            min-width:0;
+        }
+
+        .stats h3 { margin:0 0 12px;font-size:14px; }
+        .stats strong { font-size:22px;overflow-wrap:anywhere; }
+
+        .admin-form {
+            display:grid;
+            grid-template-columns:repeat(2,minmax(0,1fr));
+            gap:14px;
+            margin:20px 0;
+        }
+
+        .admin-form label {
+            display:flex;
+            flex-direction:column;
+            gap:6px;
+            font-weight:600;
+            min-width:0;
+        }
+
+        .admin-form input,.admin-form select,.admin-form textarea {
+            width:100%;
+            min-width:0;
+            padding:11px;
+            border:1px solid #ccd5df;
+            border-radius:7px;
+            font:inherit;
+            box-sizing:border-box;
+        }
+
+        .admin-form textarea { min-height:80px; }
+        .full-width { grid-column:1/-1; }
+
+        .admin-button {
+            padding:11px 16px;
+            border:0;
+            border-radius:7px;
+            background:#084879;
+            color:#fff;
+            cursor:pointer;
+            font-weight:600;
+        }
+
+        .admin-button.secondary { background:#64748b; }
+        .admin-button.danger { background:#b42318; }
+        .admin-button.small { padding:7px 10px;margin:2px; }
+
+        .admin-button:disabled {
+            opacity:.65;
+            cursor:not-allowed;
+        }
+
+        .table-wrap {
+            width:100%;
+            overflow-x:auto;
+            -webkit-overflow-scrolling:touch;
+        }
+
+        .admin-table {
+            width:100%;
+            border-collapse:collapse;
+            min-width:650px;
+        }
+
+        .admin-table th,.admin-table td {
+            padding:12px;
+            border-bottom:1px solid #e5eaf0;
+            text-align:left;
+        }
+
+        .admin-table th { background:#f2f6fa; }
+
+        .admin-message {
+            padding:12px;
+            margin:12px 0;
+            border-radius:7px;
+        }
+
+        .admin-message.error { background:#fee4e2;color:#912018; }
+        .admin-message.info { background:#eaf3ff;color:#174477; }
+        .admin-message.success { background:#dcfae6;color:#05603a; }
+
+        .admin-list-item {
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            padding:12px 0;
+            border-bottom:1px solid #e5eaf0;
+        }
+
+        .stock-warning { color:#b42318;font-weight:700; }
+        .form-actions { display:flex;gap:10px;flex-wrap:wrap; }
+        .sidebar-link { cursor:pointer; }
+        .section-intro { color:#64748b;margin-top:5px; }
+
+        .image-methods {
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            margin-bottom:12px;
+        }
+
+        .image-methods label {
+            display:flex;
+            align-items:center;
+            flex-direction:row;
+            gap:7px;
+            padding:10px 14px;
+            border:1px solid #ccd5df;
+            border-radius:8px;
+            cursor:pointer;
+            font-weight:600;
+        }
+
+        .image-methods input { width:auto; }
+
+        .image-preview {
+            display:none;
+            margin-top:12px;
+            max-width:220px;
+            max-height:180px;
+            object-fit:contain;
+            border:1px solid #dbe3eb;
+            border-radius:8px;
+            padding:5px;
+            background:#f8fafc;
+        }
+
+        .image-help { color:#64748b;font-size:13px;font-weight:400; }
+
+        /* Sales chart */
+        .sales-chart { display:grid;gap:18px;margin-top:20px; }
+
+        .sales-chart-row {
+            display:grid;
+            grid-template-columns:105px minmax(0,1fr);
+            gap:12px;
+            align-items:center;
+        }
+
+        .sales-chart-label {
+            font-size:13px;
+            font-weight:700;
+            color:#334155;
+        }
+
+        .sales-chart-track {
+            height:15px;
+            background:#e5eaf0;
+            border-radius:20px;
+            overflow:hidden;
+        }
+
+        .sales-chart-bar {
+            height:100%;
+            background:linear-gradient(90deg,#0875b9,#20a4e8);
+            border-radius:20px;
+            transition:width .4s ease;
+        }
+
+        .sales-chart-details {
+            grid-column:2;
+            display:flex;
+            justify-content:space-between;
+            flex-wrap:wrap;
+            gap:8px;
+            font-size:13px;
+        }
+
+        .sales-growth-positive { color:#067647;font-weight:700; }
+        .sales-growth-negative { color:#b42318;font-weight:700; }
+        .sales-growth-neutral { color:#64748b;font-weight:700; }
+
+        /* Mobile menu */
+        .mobile-menu-bar { display:none; }
+
+        .menu-toggle {
+            width:45px;
+            height:42px;
+            border:0;
+            border-radius:8px;
+            background:#082f63;
+            color:white;
+            cursor:pointer;
+            align-items:center;
+            justify-content:center;
+            flex-direction:column;
+            gap:5px;
+        }
+
+        .menu-toggle span {
+            display:block;
+            width:23px;
+            height:3px;
+            border-radius:3px;
+            background:white;
+            transition:.2s;
+        }
+
+        .menu-toggle[aria-expanded="true"] span:nth-child(1) {
+            transform:translateY(8px) rotate(45deg);
+        }
+
+        .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity:0; }
+
+        .menu-toggle[aria-expanded="true"] span:nth-child(3) {
+            transform:translateY(-8px) rotate(-45deg);
+        }
+
+        .sidebar-overlay { display:none; }
+
+        .mobile-menu-brand {
+            font-size:19px;
+            font-weight:bold;
+            color:#082f63;
+        }
+
+        .mobile-menu-brand span { color:#0284c7; }
+
+        @media(max-width:1100px) {
+            .stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+        }
+
+        @media(max-width:768px) {
+            .admin-layout { display:block; }
+
+            .mobile-menu-bar {
+                display:flex;
+                align-items:center;
+                gap:14px;
+                min-height:65px;
+                padding:10px 16px;
+                background:white;
+                box-shadow:0 2px 10px #0000000d;
+                position:sticky;
+                top:0;
+                z-index:900;
+            }
+
+            .menu-toggle { display:flex; }
+
+            .sidebar {
+                position:fixed;
+                top:0;
+                left:0;
+                bottom:0;
+                width:min(290px,82vw);
+                height:100vh;
+                height:100dvh;
+                overflow-y:auto;
+                padding:25px 18px;
+                transform:translateX(-105%);
+                visibility:hidden;
+                transition:transform .25s ease,visibility .25s ease;
+                z-index:1000;
+            }
+
+            body.menu-open .sidebar {
+                transform:translateX(0);
+                visibility:visible;
+            }
+
+            .sidebar nav {
+                grid-template-columns:1fr;
+                gap:8px;
+            }
+
+            .sidebar nav a { padding:15px; }
+            #logoutBtn { margin-top:30px; }
+
+            .sidebar-overlay {
+                display:block;
+                position:fixed;
+                inset:0;
+                z-index:950;
+                background:rgba(15,23,42,.55);
+                opacity:0;
+                visibility:hidden;
+                border:0;
+                transition:opacity .25s ease,visibility .25s ease;
+            }
+
+            body.menu-open .sidebar-overlay {
+                opacity:1;
+                visibility:visible;
+            }
+
+            .main-content { padding:16px; }
+
+            header.main-header {
+                align-items:flex-start;
+                flex-direction:column;
+                gap:10px;
+                margin-bottom:20px;
+            }
+
+            header.main-header h1 { font-size:24px; }
+            .admin-section { padding:16px;margin:15px 0; }
+            .stats { grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }
+            .stats article { padding:15px; }
+            .stats h3 { font-size:13px; }
+            .stats strong { font-size:20px; }
+            .panel { padding:16px; }
+            .admin-form { grid-template-columns:1fr; }
+            .full-width { grid-column:auto; }
+            .form-actions .admin-button { flex:1 1 auto; }
+            body.menu-open { overflow:hidden; }
+        }
+
+        @media(max-width:420px) {
+            .main-content { padding:12px; }
+            .mobile-menu-bar { padding:10px 12px; }
+            .admin-section { padding:13px; }
+            .stats { grid-template-columns:1fr; }
+            .stats article { padding:16px; }
+            header.main-header h1 { font-size:22px; }
+            .image-methods { flex-direction:column;align-items:flex-start; }
+
+            .sales-chart-row {
+                grid-template-columns:75px minmax(0,1fr);
+                gap:8px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="admin-layout">
+
+    <div class="mobile-menu-bar">
+        <button type="button" class="menu-toggle" id="mobileMenuToggle"
+            aria-label="Open admin menu" aria-expanded="false"
+            aria-controls="adminSidebar">
+            <span></span><span></span><span></span>
+        </button>
+        <div class="mobile-menu-brand">CLEAN <span>WAVE</span></div>
+    </div>
+
+    <button type="button" class="sidebar-overlay" id="sidebarOverlay"
+        aria-label="Close admin menu" tabindex="-1"></button>
+
+    <aside class="sidebar" id="adminSidebar">
+        <h2>CLEAN <span>WAVE</span></h2>
+        <p>ADMIN PANEL</p>
+
+        <nav>
+            <a href="#dashboard" class="sidebar-link active" data-section="dashboard">Dashboard</a>
+            <a href="#products" class="sidebar-link" data-section="products">Products</a>
+            <a href="#orders" class="sidebar-link" data-section="orders">Orders</a>
+            <a href="#expenses" class="sidebar-link" data-section="expenses">Expenses</a>
+            <a href="#customers" class="sidebar-link" data-section="customers">Customers</a>
+            <a href="#inventory" class="sidebar-link" data-section="inventory">Inventory</a>
+        </nav>
+
+        <button id="logoutBtn" type="button">Sign Out</button>
+    </aside>
+
+    <main class="main-content">
+        <header class="main-header">
+            <div>
+                <h1 id="pageTitle">Dashboard</h1>
+                <p>Welcome to CLEAN WAVE Management</p>
+            </div>
+            <div id="adminUser">Checking account...</div>
+        </header>
+
+        <div id="adminMessage" class="admin-message" role="status"
+            aria-live="polite" style="display:none"></div>
+
+        <!-- DASHBOARD -->
+        <section id="dashboardSection" class="admin-section active">
+            <div class="form-actions">
+                <h2>Business Overview</h2>
+                <button class="admin-button" id="refreshDashboard" type="button">
+                    Refresh Statistics
+                </button>
+            </div>
+               
+            <div class="stats">
+                <article><h3>Total Sales</h3><strong id="totalSales">₹0</strong></article>
+                <article><h3>Total Expenses</h3><strong id="totalExpenses">₹0</strong></article>
+                <article><h3>Profit</h3><strong id="estimatedProfit">₹0</strong></article>
+                <article><h3>Total Orders</h3><strong id="totalOrders">0</strong></article>
+                <article><h3>Pending Orders</h3><strong id="pendingOrders">0</strong></article>
+                <article><h3>Total Products</h3><strong id="totalProducts">0</strong></article>
+                <article><h3>Total Customers</h3><strong id="totalCustomers">0</strong></article>
+                <article><h3>Low Stock Products</h3><strong id="lowStockCount">0</strong></article>
+                <article><h3>Current Month Sales</h3><strong id="currentMonthSales">₹0</strong></article>
+            </div>
+              
+            
+<!-- ==========================================
+     REPORTING & MONTHLY STATEMENTS
+=========================================== -->
+
+<div class="panel" id="reportingPanel">
+
+    <div class="panel-header">
+        <div>
+            <h2>Reporting &amp; Monthly Statements</h2>
+
+            <p class="section-intro">
+                Manage your business reporting period and download
+                monthly financial statements.
+            </p>
+        </div>
+    </div>
+
+    <!-- REPORTING STATUS -->
+
+    <div
+        id="reportingStatus"
+        class="admin-message info"
+        role="status"
+        aria-live="polite"
+    >
+        Reporting is not activated yet.
+        Download your business backup before activation.
+    </div>
+
+    <!-- BACKUP AND ACTIVATION -->
+
+    <div class="reporting-actions">
+
+        <button
+            type="button"
+            class="admin-button"
+            id="downloadBackupBtn"
+        >
+            <span aria-hidden="true">⬇</span>
+            Download Business Backup
+        </button>
+
+        <button
+            type="button"
+            class="admin-button secondary"
+            id="activateReportingBtn"
+        >
+            Activate Reporting from 9 Nov 2026
+        </button>
+
+    </div>
+
+    <div class="reporting-information">
+
+        <h3>Reporting Configuration</h3>
+
+        <div class="reporting-info-grid">
+
+            <div class="reporting-info-item">
+                <span>Reporting Start Date</span>
+                <strong>9 November 2026</strong>
+            </div>
+
+            <div class="reporting-info-item">
+                <span>Timezone</span>
+                <strong>Asia/Kolkata (IST)</strong>
+            </div>
+
+            <div class="reporting-info-item">
+                <span>November Reporting Period</span>
+                <strong>9–30 November 2026</strong>
+            </div>
+
+            <div class="reporting-info-item">
+                <span>Following Months</span>
+                <strong>Full Calendar Month</strong>
+            </div>
+
+        </div>
+
+        <p>
+            Older orders, expenses, customers, products and inventory
+            records will remain stored. Only dashboard reporting totals
+            will use the new reporting start date after activation.
+        </p>
+
+    </div>
+
+    <div class="reporting-divider"></div>
+
+    <!-- MONTHLY STATEMENTS -->
+
+    <div class="monthly-statement-section">
+
+        <h3>Download Monthly Statement</h3>
+
+        <p>
+            Select a month to generate its financial statement in PDF
+            or Excel format.
+        </p>
+
+        <div class="report-month-control">
+
+            <label for="reportMonth">
+                Select Statement Month
+            </label>
+
+            <input
+                type="month"
+                id="reportMonth"
+                value="2026-11"
+                min="2026-11"
+            >
+
+        </div>
+
+        <div class="reporting-actions">
+
+            <button
+                type="button"
+                class="admin-button"
+                id="downloadPdfBtn"
+            >
+                <span aria-hidden="true">📄</span>
+                Download Monthly PDF
+            </button>
+
+            <button
+                type="button"
+                class="admin-button secondary"
+                id="downloadExcelBtn"
+            >
+                <span aria-hidden="true">📊</span>
+                Download Monthly Excel
+            </button>
+
+        </div>
+
+    </div>
+
+    <!-- REPORT DETAILS -->
+
+    <div class="reporting-note">
+
+        <strong>Statement includes:</strong>
+
+        <ul>
+            <li>Total sales excluding cancelled orders</li>
+            <li>Total recorded expenses</li>
+            <li>Estimated profit (sales minus expenses)</li>
+            <li>Total monthly orders</li>
+            <li>Order counts by status</li>
+            <li>Monthly sales growth compared with the previous month</li>
+            <li>Individual order and expense details in Excel</li>
+        </ul>
+
+        <p>
+            These are management statements, not audited or tax
+            financial statements. Estimated profit does not include
+            costs that have not been entered into the Expenses section.
+        </p>
+
+    </div>
+
+</div>
+
+<!-- END REPORTING PANEL -->
+
+            <div class="panel">
+                <h2>Low Stock Products</h2>
+                <div id="lowStockProducts"><p>No data loaded.</p></div>
+            </div>
+
+            <div class="panel">
+                <h2>Monthly Sales &amp; Growth - Last 6 Months</h2>
+                <div id="monthlySales"><p>No sales data loaded.</p></div>
+            </div>
+        </section>
+
+        <!-- PRODUCTS -->
+        <section id="productsSection" class="admin-section">
+            <h2>Product Management</h2>
+            <p class="section-intro">Add new products or edit and deactivate existing products.</p>
+
+            <form id="productForm" class="admin-form">
+                <input type="hidden" id="productId">
+
+                <label>Product Name
+                    <input id="productName" required maxlength="150">
+                </label>
+
+                <label>Category
+                    <select id="productCategory" required>
+                        <option value="industrial">Industrial</option>
+                        <option value="household">Household</option>
+                        <option value="car-wash">Car Wash</option>
+                    </select>
+                </label>
+
+                <label>SKU
+                    <input id="productSku" maxlength="80">
+                </label>
+
+                <label>Unit
+                    <input id="productUnit" placeholder="1 Litre, 500 ml">
+                </label>
+
+                <label>Selling Price (₹)
+                    <input id="productSellingPrice" type="number" min="0" step="0.01" required>
+                </label>
+
+                <label>Stock Quantity
+                    <input id="productStock" type="number" min="0" step="1" value="0">
+                </label>
+
+                <label>Low Stock Alert
+                    <input id="productThreshold" type="number" min="0" step="1" value="5">
+                </label>
+
+                <div class="full-width">
+                    <strong>Product Image</strong>
+                    <p class="image-help">Choose one method to add the product image.</p>
+
+                    <div class="image-methods">
+                        <label><input type="radio" name="imageMethod" value="url" checked> Image URL</label>
+                        <label><input type="radio" name="imageMethod" value="gallery"> Upload from Gallery</label>
+                    </div>
+
+                    <div id="imageUrlArea">
+                        <label>Image URL
+                            <input id="productImage" type="url"
+                                placeholder="https://example.com/product.jpg">
+                        </label>
+                    </div>
+
+                    <div id="imageGalleryArea" style="display:none">
+                        <label>Choose Image from Computer
+                            <input id="productImageFile" type="file"
+                                accept="image/jpeg,image/png,image/webp,image/gif">
+                        </label>
+                        <p class="image-help">Allowed: JPG, PNG, WEBP or GIF. Maximum size: 5 MB.</p>
+                    </div>
+
+                    <img id="productImagePreview" class="image-preview" alt="Product image preview">
+                </div>
+
+                <label class="full-width">Description
+                    <textarea id="productDescription"></textarea>
+                </label>
+
+                <label>Product Active
+                    <select id="productActive">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </label>
+
+                <div class="form-actions full-width">
+                    <button class="admin-button" type="submit" id="saveProductBtn">Add Product</button>
+                    <button class="admin-button secondary" type="button" id="cancelProductEdit">Clear Form</button>
+                </div>
+            </form>
+
+            <h2>All Products</h2>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th><th>Category</th><th>SKU</th>
+                            <th>Price</th><th>Stock</th><th>Status</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody">
+                        <tr><td colspan="7">Loading products...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ORDERS -->
+        <section id="ordersSection" class="admin-section">
+            <h2>Customer Orders</h2>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice</th><th>Customer</th><th>Phone</th>
+                            <th>Total</th><th>Status</th><th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTableBody">
+                        <tr><td colspan="6">Loading orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- EXPENSES -->
+        <section id="expensesSection" class="admin-section">
+            <h2>Expense Management</h2>
+            <p class="section-intro">Record and manage business expenses.</p>
+
+            <form id="expenseForm" class="admin-form">
+                <input type="hidden" id="expenseId">
+
+                <label>Expense Title
+                    <input id="expenseTitle" maxlength="200"
+                        placeholder="e.g. Factory electricity bill" required>
+                </label>
+
+                <label>Category
+                    <select id="expenseCategory" required>
+                        <option value="raw_material">Raw Material</option>
+                        <option value="packaging">Packaging</option>
+                        <option value="labour">Labour</option>
+                        <option value="transport">Transport</option>
+                        <option value="electricity">Electricity</option>
+                        <option value="rent">Rent</option>
+                        <option value="maintenance">Maintenance</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="other">Other</option>
+                    </select>
+                </label>
+
+                <label>Amount (₹)
+                    <input id="expenseAmount" type="number" min="0.01" step="0.01" required>
+                </label>
+
+                <label>Expense Date
+                    <input id="expenseDate" type="date" required>
+                </label>
+
+                <label>Payment Method
+                    <select id="expensePaymentMethod">
+                        <option value="">Select payment method</option>
+                        <option value="cash">Cash</option>
+                        <option value="upi">UPI</option>
+                        <option value="bank_transfer">Bank Transfer</option>
+                        <option value="card">Card</option>
+                        <option value="other">Other</option>
+                    </select>
+                </label>
+
+                <label>Reference Number
+                    <input id="expenseReference" maxlength="120"
+                        placeholder="Optional transaction or bill number">
+                </label>
+
+                <label class="full-width">Notes
+                    <textarea id="expenseNotes" placeholder="Additional details"></textarea>
+                </label>
+
+                <div class="form-actions full-width">
+                    <button class="admin-button" id="saveExpenseBtn" type="submit">Add Expense</button>
+                    <button class="admin-button secondary" id="cancelExpenseEdit" type="button">Clear Form</button>
+                </div>
+            </form>
+
+            <div class="panel">
+                <h3>Total Expenses Listed</h3>
+                <strong id="expenseTotal">₹0</strong>
+            </div>
+
+            <h2>All Expenses</h2>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th><th>Category</th><th>Amount</th>
+                            <th>Date</th><th>Payment</th><th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expensesTableBody">
+                        <tr><td colspan="6">Loading expenses...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- CUSTOMERS -->
+        <section id="customersSection" class="admin-section">
+            <h2>Customers</h2>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>Name</th><th>Email</th><th>Phone</th><th>Address</th></tr>
+                    </thead>
+                    <tbody id="customersTableBody">
+                        <tr><td colspan="4">Loading customers...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- INVENTORY -->
+        <section id="inventorySection" class="admin-section">
+            <h2>Inventory Management</h2>
+            <p class="section-intro">Add new stock or record stock used, damaged or removed.</p>
+
+            <form id="inventoryForm" class="admin-form">
+                <label>Select Product
+                    <select id="inventoryProduct" required>
+                        <option value="">Loading products...</option>
+                    </select>
+                </label>
+
+                <label>Stock Action
+                    <select id="inventoryDirection" required>
+                        <option value="add">Add Stock</option>
+                        <option value="remove">Remove Stock</option>
+                    </select>
+                </label>
+
+                <label>Quantity
+                    <input id="inventoryQuantity" type="number" min="1" step="1" required>
+                </label>
+
+                <label class="full-width">Notes
+                    <textarea id="inventoryNotes"
+                        placeholder="e.g. Purchased 20 cans, damaged 2 bottles"></textarea>
+                </label>
+
+                <div class="form-actions full-width">
+                    <button class="admin-button" type="submit" id="saveInventoryBtn">Update Stock</button>
+                    <button class="admin-button secondary" type="button" id="clearInventoryForm">Clear Form</button>
+                </div>
+            </form>
+
+            <h2>Current Product Stock</h2>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th><th>Category</th><th>SKU</th>
+                            <th>Available Stock</th><th>Low Stock Alert</th><th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        <tr><td colspan="6">Loading stock...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 style="margin-top:30px">Stock Transaction History</h2>
+            <div class="table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Product</th><th>Quantity Change</th>
+                            <th>Transaction Type</th><th>Notes</th><th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryHistoryBody">
+                        <tr><td colspan="5">Loading history...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const toggle = document.getElementById("mobileMenuToggle");
+    const overlay = document.getElementById("sidebarOverlay");
+    const sidebar = document.getElementById("adminSidebar");
+    const links = document.querySelectorAll(".sidebar-link");
+
+    if (!toggle || !overlay || !sidebar) return;
+
+    function openMenu() {
+        document.body.classList.add("menu-open");
+        toggle.setAttribute("aria-expanded", "true");
+        toggle.setAttribute("aria-label", "Close admin menu");
+    }
+
+    function closeMenu() {
+        document.body.classList.remove("menu-open");
+        toggle.setAttribute("aria-expanded", "false");
+        toggle.setAttribute("aria-label", "Open admin menu");
+    }
+
+    toggle.addEventListener("click", function () {
+        document.body.classList.contains("menu-open") ? closeMenu() : openMenu();
+    });
+
+    overlay.addEventListener("click", closeMenu);
+    links.forEach(link => link.addEventListener("click", closeMenu));
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closeMenu();
+    });
+
+    window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) closeMenu();
+    });
+});
+</script>
+</body>
+</html>

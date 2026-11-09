@@ -1,39 +1,328 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Shopping Cart | CLEAN WAVE</title>
+
     <link rel="stylesheet" href="style.css">
-    <script src="clerk-config.js" defer></script>
-    <script src="clerk-auth.js" defer></script>
+    
+
+    <style>
+        #checkoutPayment[hidden] {
+            display: none !important;
+        }
+
+        #checkoutPayment {
+            width: min(1100px, 94%);
+            margin: 35px auto;
+        }
+
+        .payment-card {
+            background: #ffffff;
+            border: 1px solid #dce6ef;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 28px rgba(0, 35, 70, .08);
+        }
+
+        .payment-heading {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .payment-eyebrow {
+            color: #0876bd;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .payment-heading h2 {
+            color: #083d69;
+            margin: 8px 0;
+        }
+
+        .payment-heading p,
+        .upi-help,
+        .upi-qr-box p {
+            color: #64748b;
+        }
+
+        .payment-order-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .payment-order-info > div {
+            padding: 14px;
+            background: #f2f7fb;
+            border-radius: 9px;
+        }
+
+        .payment-order-info span {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .payment-order-info strong {
+            color: #083d69;
+            overflow-wrap: anywhere;
+        }
+
+        .upi-payment-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        .upi-qr-box,
+        .upi-details {
+            padding: 22px;
+            border: 1px solid #dce6ef;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .upi-qr-box h3,
+        .upi-details h3 {
+            color: #083d69;
+            margin-top: 0;
+        }
+
+        .upi-qr-image {
+            width: 250px;
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 15px auto;
+            border: 8px solid white;
+        }
+
+        .upi-payee {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            background: #f2f7fb;
+            padding: 12px;
+            border-radius: 8px;
+            overflow-wrap: anywhere;
+        }
+
+        .upi-payee span {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .upi-payee strong {
+            color: #083d69;
+        }
+
+        .upi-amount {
+            margin: 20px 0;
+            color: #64748b;
+        }
+
+        .upi-amount strong {
+            display: block;
+            font-size: 28px;
+            color: #083d69;
+            margin-top: 5px;
+        }
+
+        .upi-pay-button,
+        .payment-actions button,
+        #upiReferenceForm button {
+            display: inline-block;
+            border: 0;
+            border-radius: 8px;
+            padding: 13px 18px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            color: white;
+        }
+
+        .upi-pay-button {
+            background: #0876bd;
+            width: 100%;
+        }
+
+        .upi-pay-button:hover {
+            background: #065d96;
+        }
+
+        .upi-reference-section {
+            margin-top: 24px;
+            padding: 22px;
+            background: #f7fafc;
+            border-radius: 12px;
+        }
+
+        .upi-reference-section h3 {
+            color: #083d69;
+            margin-top: 0;
+        }
+
+        .upi-reference-section p {
+            color: #64748b;
+        }
+
+        #upiReferenceForm {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #upiReferenceForm label {
+            font-weight: 700;
+            color: #26384a;
+        }
+
+        #upiReferenceInput {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 13px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        #upiReferenceForm button {
+            background: #168b45;
+        }
+
+        #upiReferenceForm button:disabled,
+        .payment-actions button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        .reference-message {
+            min-height: 20px;
+            font-weight: 600;
+        }
+
+        .reference-message.success {
+            color: #168b45;
+        }
+
+        .reference-message.error {
+            color: #c62828;
+        }
+
+        .payment-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .payment-actions button {
+            flex: 1;
+            min-width: 180px;
+        }
+
+        .invoice-action {
+            background: #083d69;
+        }
+
+        .whatsapp-action {
+            background: #168b45;
+        }
+
+        .refresh-payment-action {
+            background: #64748b;
+        }
+
+        .payment-warning {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #805b13;
+            background: #fff8e5;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 20px;
+        }
+
+        .checkout-note {
+            font-size: 12px;
+            line-height: 1.5;
+            color: #64748b;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 700px) {
+            .upi-payment-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .payment-card {
+                padding: 15px;
+            }
+
+            .payment-actions {
+                flex-direction: column;
+            }
+
+            .payment-actions button {
+                width: 100%;
+            }
+        }
+    </style>
+
+ 
+    <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+    <script src="/auth.js" defer></script>
     <script src="app.js" defer></script>
 </head>
+
 <body>
 
 <header class="header">
     <div class="nav-container">
-        <a href="index.html" class="logo">CLEAN <span>WAVE</span></a>
 
-        <button class="menu-toggle" id="menuToggle"
-            aria-label="Toggle menu" aria-expanded="false">
-            <span></span><span></span><span></span>
+        <a href="index.html" class="logo">
+            CLEAN <span>WAVE</span>
+        </a>
+
+        <button
+            class="menu-toggle"
+            id="menuToggle"
+            aria-label="Toggle menu"
+            aria-expanded="false"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
         </button>
 
         <nav class="navbar" id="navbar">
             <a href="index.html">Home</a>
             <a href="index.html#about">About</a>
             <a href="index.html#contact">Contact</a>
+
             <a href="cart.html" class="cart-btn active">
                 Cart <span id="cartCount">0</span>
             </a>
+
             <a href="tel:+919106562058" class="call-btn">Call Us</a>
         </nav>
+
     </div>
 </header>
 
 <main class="cart-page">
+
     <section class="cart-main">
+
         <div class="cart-title">
             <span>YOUR ORDER</span>
             <h1>Shopping Cart</h1>
@@ -45,15 +334,31 @@
         <a href="index.html#products" class="continue-shopping">
             ← Continue Shopping
         </a>
+
     </section>
 
-    <aside id="cartSummary" class="cart-summary-container"></aside>
+    <aside
+        id="cartSummary"
+        class="cart-summary-container"
+    ></aside>
+
 </main>
 
+<!-- UPI PAYMENT SECTION: DISPLAYED AFTER ORDER CREATION -->
+<section id="checkoutPayment" hidden></section>
+
 <footer class="footer">
-    <a href="index.html" class="logo footer-logo">CLEAN <span>WAVE</span></a>
+
+    <a href="index.html" class="logo footer-logo">
+        CLEAN <span>WAVE</span>
+    </a>
+
     <p>Quality cleaning solutions from CLEAN WAVE.</p>
-    <p class="copyright">© 2026 CLEAN WAVE. All Rights Reserved.</p>
+
+    <p class="copyright">
+        © 2026 CLEAN WAVE. All Rights Reserved.
+    </p>
+
 </footer>
 
 </body>
