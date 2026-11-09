@@ -1,8 +1,8 @@
 {
   "name": "clean_wave_clerk---copy",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000C\u0000l\u0000e\u0000a\u0000n\u0000_\u0000W\u0000a\u0000v\u0000e\u00001\u0000\r\u0000 \u0000#\u0000 \u0000C\u0000l\u0000e\u0000a\u0000n\u0000_\u0000W\u0000a\u0000v\u0000e\u00001\u0000\r\u0000 \u0000",
-  "main": "app.js",
+  "description": "CLEAN WAVE industrial, household and car-wash products website with Express backend.",
+  "main": "server.js",
   "scripts": {
     "start": "node server/server.js",
     "dev": "nodemon server/server.js"

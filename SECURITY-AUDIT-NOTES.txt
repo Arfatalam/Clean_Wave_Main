@@ -1,0 +1,20 @@
+CLEAN WAVE - SOURCE PACKAGE AUDIT
+Audit date: 2026-11-09
+
+SCOPE
+Reviewed the source files supplied in the uploaded ZIP: HTML, CSS, browser JavaScript, Express server entry points, route files, package metadata and Git tree metadata. JavaScript files passed Node syntax checks.
+
+OBSERVATIONS
+1. No obvious obfuscated payloads, eval/new Function usage, injected remote script tags, or unknown iframe loaders were found in the reviewed source. The homepage Google Maps iframe is an expected map embed.
+2. The app.js document.write() call is used to generate a printable invoice. It is not by itself proof of malicious code.
+3. Razorpay Checkout is the expected third-party payment script. Unsplash, Google Maps, WhatsApp, Placehold and Clerk are also referenced by the site.
+4. The old account.html page loads Clerk from the Clerk frontend domain encoded in clerk-config.js. The main app also uses its own Express/Supabase-backed authentication routes. Both implementations were retained to avoid breaking current pages.
+5. node_modules was tracked in the supplied Git HEAD. It should not be committed; .gitignore now excludes it.
+6. The supplied .env file had populated credential values. It is excluded from this cleaned archive. The supplied Git history did not contain a tracked .env file. Treat credentials in the uploaded archive as exposed and rotate actual active secrets before production use.
+7. The root file named 'c' contained terminal 'less' help text, not application code. It was removed. An unused server/server.js.backup file was also removed.
+
+IMPORTANT LIMITATION
+This audit does NOT prove why Google Search Console classified the deployed site as 'Deceptive pages'. Search Console showed Sample URLs: N/A, so the specific flagged page was not identified. Source inspection cannot inspect Google's private detection signals, all historical deployed versions, DNS/domain reputation, compromised third-party accounts, or content served only in production. Do not mark 'Done fixing?' or request review until the live deployment has been checked and any cause is corrected.
+
+FUNCTIONALITY PRESERVED
+No application authentication, OAuth, admin, product, cart, order, payment, reporting, password-reset or database route code was intentionally changed. Cleanup is limited to packaging, project metadata, ignore rules, documentation and removal of non-runtime artefacts.

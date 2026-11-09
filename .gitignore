@@ -1,6 +1,19 @@
+# Dependencies and local build output
 node_modules/
+.vercel/
+dist/
+build/
+
+# Environment secrets (never commit these)
 .env
 .env.*
 !.env.example
-.vercel/
+
+# Logs and local OS/editor files
 *.log
+.DS_Store
+Thumbs.db
+
+# Local uploads / temporary files
+uploads/
+tmp/
