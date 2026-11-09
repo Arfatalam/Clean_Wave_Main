@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 require("dotenv").config();
 
@@ -204,7 +204,7 @@ app.use("/api/inventory", require("./routes/inventory"));
 // STATIC WEBSITE
 // ==========================================
 
-const websiteFolder = path.join(__dirname, "..");
+const websiteFolder = path.join(__dirname, "..", "public");
 
 app.use(express.static(websiteFolder, {
     dotfiles: "ignore",
@@ -241,11 +241,15 @@ app.use((error, req, res, next) => {
 // START SERVER
 // ==========================================
 
-app.listen(PORT, () => {
-    console.log("------------------------------------");
-    console.log("CLEAN WAVE backend started");
-    console.log(`Website: http://localhost:${PORT}`);
-    console.log(`Health: http://localhost:${PORT}/api/health`);
-    console.log(`Admin: http://localhost:${PORT}/admin.html`);
-    console.log("------------------------------------");
-});
+if (require.main === module) {
+    app.listen(PORT, () => {
+        console.log("------------------------------------");
+        console.log("CLEAN WAVE backend started");
+        console.log(`Website: http://localhost:${PORT}`);
+        console.log(`Health: http://localhost:${PORT}/api/health`);
+        console.log(`Admin: http://localhost:${PORT}/admin.html`);
+        console.log("------------------------------------");
+    });
+}
+
+module.exports = app;

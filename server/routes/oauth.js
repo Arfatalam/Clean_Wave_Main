@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 
 const express = require("express");
 const crypto = require("crypto");
@@ -18,30 +18,19 @@ function normalizeEmail(email) {
 
 function startGoogleOAuth(req, res, next) {
     console.log("GOOGLE OAUTH ROUTE REACHED");
-    console.log("Session available:", !!req.session);
-    console.log("Google Client ID available:", !!process.env.GOOGLE_CLIENT_ID);
-    console.log("Google Callback URL:", process.env.GOOGLE_CALLBACK_URL);
+    console.log(
+        "Google Client ID available:",
+        !!process.env.GOOGLE_CLIENT_ID
+    );
+    console.log(
+        "Google Callback URL:",
+        process.env.GOOGLE_CALLBACK_URL
+    );
 
-    if (!req.session) {
-        return res.status(500).send("OAuth session is unavailable.");
-    }
-
-    req.session.cwRememberMe =
-        req.query.remember === "1";
-
-    req.session.save(error => {
-        if (error) {
-            console.error("OAuth session save error:", error);
-            return next(error);
-        }
-
-        console.log("OAuth session saved. Redirecting to Google...");
-
-        passport.authenticate("google", {
-            scope: ["profile", "email"],
-            session: false
-        })(req, res, next);
-    });
+    return passport.authenticate("google", {
+        scope: ["profile", "email"],
+        session: false
+    })(req, res, next);
 }
 
 async function finishGoogleOAuth(req, res) {
@@ -82,7 +71,9 @@ async function finishGoogleOAuth(req, res) {
         if (existingLink) {
             const { data, error } = await db
                 .from("app_users")
-                .select("id,full_name,company_name,email,phone,role,is_active")
+                .select(
+                    "id,full_name,company_name,email,phone,role,is_active"
+                )
                 .eq("id", existingLink.user_id)
                 .maybeSingle();
 
@@ -127,7 +118,9 @@ async function finishGoogleOAuth(req, res) {
                     role: "customer",
                     is_active: true
                 })
-                .select("id,full_name,company_name,email,phone,role,is_active")
+                .select(
+                    "id,full_name,company_name,email,phone,role,is_active"
+                )
                 .single();
 
             if (createError) throw createError;
@@ -157,7 +150,7 @@ async function finishGoogleOAuth(req, res) {
         const tokenHash = hashToken(token);
 
         const rememberMe =
-            req.session?.cwRememberMe === true;
+            req.cwOAuthRememberMe === true;
 
         const sessionDays = rememberMe ? 20 : 7;
 
@@ -177,13 +170,11 @@ async function finishGoogleOAuth(req, res) {
 
         setSessionCookie(res, token, sessionDays);
 
-        req.session.destroy(() => {
-            if (user.role === "admin") {
-                return res.redirect("/admin.html");
-            }
+        if (user.role === "admin") {
+            return res.redirect("/admin.html");
+        }
 
-            return res.redirect("/index.html");
-        });
+        return res.redirect("/index.html");
 
     } catch (error) {
         console.error("CLEAN WAVE Google OAuth error:", error);
